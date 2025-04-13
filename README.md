@@ -13,7 +13,7 @@ rpg_management/
 │   ├── services/
 │   │   ├── character_service.dart  # Lógica de negócios para Personagem
 │   │   └── magic_item_service.dart # Lógica de negócios para Item Mágico
-│   ├── main.dart                   # Ponto de entrada da aplicação
+│   └── main.dart                   # Ponto de entrada da aplicação
 ├── test/
 │   ├── character_test.dart         # Testes para Personagem
 │   └── magic_item_test.dart        # Testes para Item Mágico
