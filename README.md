@@ -5,6 +5,7 @@
 
 ## Estrutura do Projeto
 
+```
 rpg_management/
 ├── lib/
 │   ├── models/
@@ -19,7 +20,7 @@ rpg_management/
 │   └── magic_item_test.dart        # Testes para Item Mágico
 ├── README.md                       # Documentação do projeto
 └── pubspec.yaml                    # Dependências e configuração do projeto
-
+```
 
 ## Descrição
 
