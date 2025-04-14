@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'models/enums.dart';
 import 'services/character_service.dart';
 import 'services/magic_item_service.dart';
+import 'utils/ui_utils.dart';
 
 class RPGCLI {
   final CharacterService characterService = CharacterService();
@@ -9,145 +9,147 @@ class RPGCLI {
 
   void run() {
     while (true) {
-      print('\n=== RPG Management System ===');
-      print('1. Gerenciar Personagens');
-      print('2. Gerenciar Itens Mágicos');
-      print('3. Sair');
-      print('Escolha uma opção: ');
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Sistema de Gerenciamento RPG');
+      UIUtils.printMenu([
+        'Gerenciar Personagens',
+        'Gerenciar Itens Mágicos',
+        'Sair'
+      ]);
 
-      final choice = stdin.readLineSync();
+      final choice = UIUtils.getNumericInput('Escolha uma opção', min: 1, max: 3);
 
       switch (choice) {
-        case '1':
+        case 1:
           manageCharacters();
           break;
-        case '2':
+        case 2:
           manageMagicItems();
           break;
-        case '3':
-          print('Saindo do sistema...');
+        case 3:
+          UIUtils.printSuccess('Saindo do sistema...');
           return;
         default:
-          print('Opção inválida!');
+          UIUtils.printError('Opção inválida!');
       }
     }
   }
 
   void manageCharacters() {
     while (true) {
-      print('\n=== Gerenciamento de Personagens ===');
-      print('1. Criar Personagem');
-      print('2. Listar Personagens');
-      print('3. Buscar Personagem por ID');
-      print('4. Atualizar Personagem');
-      print('5. Remover Personagem');
-      print('6. Adicionar Item a Personagem');
-      print('7. Remover Item de Personagem');
-      print('8. Listar Itens de Personagem');
-      print('9. Buscar Amuleto de Personagem');
-      print('10. Voltar');
-      print('Escolha uma opção: ');
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Gerenciamento de Personagens');
+      UIUtils.printMenu([
+        'Criar Personagem',
+        'Listar Personagens',
+        'Buscar Personagem por ID',
+        'Atualizar Personagem',
+        'Remover Personagem',
+        'Adicionar Item a Personagem',
+        'Remover Item de Personagem',
+        'Listar Itens de Personagem',
+        'Buscar Amuleto de Personagem',
+        'Voltar'
+      ]);
 
-      final choice = stdin.readLineSync();
+      final choice = UIUtils.getNumericInput('Escolha uma opção', min: 1, max: 10);
 
       switch (choice) {
-        case '1':
+        case 1:
           createCharacter();
           break;
-        case '2':
+        case 2:
           listCharacters();
           break;
-        case '3':
+        case 3:
           getCharacterById();
           break;
-        case '4':
+        case 4:
           updateCharacter();
           break;
-        case '5':
+        case 5:
           deleteCharacter();
           break;
-        case '6':
+        case 6:
           addItemToCharacter();
           break;
-        case '7':
+        case 7:
           removeItemFromCharacter();
           break;
-        case '8':
+        case 8:
           listCharacterItems();
           break;
-        case '9':
+        case 9:
           getCharacterAmulet();
           break;
-        case '10':
+        case 10:
           return;
         default:
-          print('Opção inválida!');
+          UIUtils.printError('Opção inválida!');
       }
     }
   }
 
   void manageMagicItems() {
     while (true) {
-      print('\n=== Gerenciamento de Itens Mágicos ===');
-      print('1. Criar Item Mágico');
-      print('2. Listar Itens Mágicos');
-      print('3. Buscar Item por ID');
-      print('4. Atualizar Item');
-      print('5. Remover Item');
-      print('6. Voltar');
-      print('Escolha uma opção: ');
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Gerenciamento de Itens Mágicos');
+      UIUtils.printMenu([
+        'Criar Item Mágico',
+        'Listar Itens Mágicos',
+        'Buscar Item por ID',
+        'Atualizar Item',
+        'Remover Item',
+        'Voltar'
+      ]);
 
-      final choice = stdin.readLineSync();
+      final choice = UIUtils.getNumericInput('Escolha uma opção', min: 1, max: 6);
 
       switch (choice) {
-        case '1':
+        case 1:
           createMagicItem();
           break;
-        case '2':
+        case 2:
           listMagicItems();
           break;
-        case '3':
+        case 3:
           getMagicItemById();
           break;
-        case '4':
+        case 4:
           updateMagicItem();
           break;
-        case '5':
+        case 5:
           deleteMagicItem();
           break;
-        case '6':
+        case 6:
           return;
         default:
-          print('Opção inválida!');
+          UIUtils.printError('Opção inválida!');
       }
     }
   }
 
   void createCharacter() {
     try {
-      print('\n=== Criar Personagem ===');
-      print('ID: ');
-      final id = stdin.readLineSync()!;
-      print('Nome: ');
-      final name = stdin.readLineSync()!;
-      print('Nome de Aventureiro: ');
-      final adventurerName = stdin.readLineSync()!;
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Criar Personagem');
 
-      print('\nClasses disponíveis:');
-      CharacterClass.values.forEach((c) => print('${c.index + 1}. ${c.name}'));
-      print('Escolha a classe (número): ');
-      final classIndex = int.parse(stdin.readLineSync()!) - 1;
+      final id = UIUtils.getInput('ID', required: true)!;
+      final name = UIUtils.getInput('Nome', required: true)!;
+      final adventurerName = UIUtils.getInput('Nome de Aventureiro', required: true)!;
+
+      UIUtils.printInfo('\nClasses disponíveis:');
+      CharacterClass.values.forEach((c) => UIUtils.printInfo('${c.index + 1}. ${c.name}'));
+      final classIndex = UIUtils.getNumericInput('Escolha a classe', min: 1, max: CharacterClass.values.length)! - 1;
       final characterClass = CharacterClass.values[classIndex];
 
-      print('Level: ');
-      final level = int.parse(stdin.readLineSync()!);
+      final level = UIUtils.getNumericInput('Level', min: 1)!;
 
-      print('\nDistribua 10 pontos entre Força e Defesa');
-      print('Força: ');
-      final force = int.parse(stdin.readLineSync()!);
-      print('Defesa: ');
-      final defense = int.parse(stdin.readLineSync()!);
+      UIUtils.printInfo('\nDistribua 10 pontos entre Força e Defesa');
+      final force = UIUtils.getNumericInput('Força', min: 0, max: 10)!;
+      final defense = UIUtils.getNumericInput('Defesa', min: 0, max: 10 - force)!;
 
+      UIUtils.showLoading('Criando personagem...');
       final character = characterService.createCharacter(
         id: id,
         name: name,
@@ -157,78 +159,77 @@ class RPGCLI {
         baseForce: force,
         baseDefense: defense,
       );
+      UIUtils.stopLoading();
 
-      print('\nPersonagem criado com sucesso!');
+      UIUtils.printSuccess('\nPersonagem criado com sucesso!');
       print(character);
     } catch (e) {
-      print('Erro ao criar personagem: $e');
+      UIUtils.printError('Erro ao criar personagem: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void listCharacters() {
     final characters = characterService.getAllCharacters();
     if (characters.isEmpty) {
-      print('Nenhum personagem cadastrado.');
+      UIUtils.printWarning('Nenhum personagem cadastrado.');
       return;
     }
-    print('\n=== Lista de Personagens ===');
-    characters.forEach(print);
+
+    UIUtils.clearScreen();
+    UIUtils.printHeader('Lista de Personagens');
+
+    final headers = ['ID', 'Nome', 'Classe', 'Nível', 'Força', 'Defesa'];
+    final rows = characters.map((c) => [
+      c.id,
+      c.name,
+      c.characterClass.name,
+      c.level.toString(),
+      c.totalForce.toString(),
+      c.totalDefense.toString()
+    ]).toList();
+
+    UIUtils.printTable(headers, rows);
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void getCharacterById() {
-    print('\nID do Personagem: ');
-    final id = stdin.readLineSync()!;
+    final id = UIUtils.getInput('ID do Personagem', required: true)!;
     try {
+      UIUtils.showLoading('Buscando personagem...');
       final character = characterService.getCharacterById(id);
-      print('\nPersonagem encontrado:');
+      UIUtils.stopLoading();
+
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Detalhes do Personagem');
       print(character);
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void updateCharacter() {
-    print('\nID do Personagem: ');
-    final id = stdin.readLineSync()!;
+    final id = UIUtils.getInput('ID do Personagem', required: true)!;
     try {
       characterService.getCharacterById(id);
 
-      print('Novo Nome (deixe em branco para manter): ');
-      final name = stdin.readLineSync();
+      final name = UIUtils.getInput('Novo Nome (deixe em branco para manter)', required: false);
+      final adventurerName = UIUtils.getInput('Novo Nome de Aventureiro (deixe em branco para manter)', required: false);
 
-      print('Novo Nome de Aventureiro (deixe em branco para manter): ');
-      final adventurerName = stdin.readLineSync();
-
-      print('\nClasses disponíveis:');
-      CharacterClass.values.forEach((c) => print('${c.index + 1}. ${c.name}'));
-      print('Nova Classe (número, deixe em branco para manter): ');
-      final classInput = stdin.readLineSync();
+      UIUtils.printInfo('\nClasses disponíveis:');
+      CharacterClass.values.forEach((c) => UIUtils.printInfo('${c.index + 1}. ${c.name}'));
+      final classInput = UIUtils.getNumericInput('Nova Classe (deixe em branco para manter)', required: false, min: 1, max: CharacterClass.values.length);
       CharacterClass? characterClass;
-      if (classInput?.isNotEmpty == true) {
-        characterClass = CharacterClass.values[int.parse(classInput!) - 1];
+      if (classInput != null) {
+        characterClass = CharacterClass.values[classInput - 1];
       }
 
-      print('Novo Level (deixe em branco para manter): ');
-      final levelInput = stdin.readLineSync();
-      int? level;
-      if (levelInput?.isNotEmpty == true) {
-        level = int.parse(levelInput!);
-      }
+      final level = UIUtils.getNumericInput('Novo Level (deixe em branco para manter)', required: false, min: 1);
+      final force = UIUtils.getNumericInput('Nova Força (deixe em branco para manter)', required: false, min: 0, max: 10);
+      final defense = UIUtils.getNumericInput('Nova Defesa (deixe em branco para manter)', required: false, min: 0, max: 10);
 
-      print('Nova Força (deixe em branco para manter): ');
-      final forceInput = stdin.readLineSync();
-      int? force;
-      if (forceInput?.isNotEmpty == true) {
-        force = int.parse(forceInput!);
-      }
-
-      print('Nova Defesa (deixe em branco para manter): ');
-      final defenseInput = stdin.readLineSync();
-      int? defense;
-      if (defenseInput?.isNotEmpty == true) {
-        defense = int.parse(defenseInput!);
-      }
-
+      UIUtils.showLoading('Atualizando personagem...');
       final updatedCharacter = characterService.updateCharacter(
         id: id,
         name: name,
@@ -238,44 +239,46 @@ class RPGCLI {
         baseForce: force,
         baseDefense: defense,
       );
+      UIUtils.stopLoading();
 
-      print('\nPersonagem atualizado com sucesso!');
+      UIUtils.printSuccess('\nPersonagem atualizado com sucesso!');
       print(updatedCharacter);
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void deleteCharacter() {
-    print('\nID do Personagem: ');
-    final id = stdin.readLineSync()!;
+    final id = UIUtils.getInput('ID do Personagem', required: true)!;
     try {
+      UIUtils.showLoading('Removendo personagem...');
       characterService.deleteCharacter(id);
-      print('Personagem removido com sucesso!');
+      UIUtils.stopLoading();
+      UIUtils.printSuccess('Personagem removido com sucesso!');
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void createMagicItem() {
     try {
-      print('\n=== Criar Item Mágico ===');
-      print('ID: ');
-      final id = stdin.readLineSync()!;
-      print('Nome: ');
-      final name = stdin.readLineSync()!;
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Criar Item Mágico');
 
-      print('\nTipos disponíveis:');
-      ItemType.values.forEach((t) => print('${t.index + 1}. ${t.name}'));
-      print('Escolha o tipo (número): ');
-      final typeIndex = int.parse(stdin.readLineSync()!) - 1;
+      final id = UIUtils.getInput('ID', required: true)!;
+      final name = UIUtils.getInput('Nome', required: true)!;
+
+      UIUtils.printInfo('\nTipos disponíveis:');
+      ItemType.values.forEach((t) => UIUtils.printInfo('${t.index + 1}. ${t.name}'));
+      final typeIndex = UIUtils.getNumericInput('Escolha o tipo', min: 1, max: ItemType.values.length)! - 1;
       final type = ItemType.values[typeIndex];
 
-      print('Força: ');
-      final force = int.parse(stdin.readLineSync()!);
-      print('Defesa: ');
-      final defense = int.parse(stdin.readLineSync()!);
+      final force = UIUtils.getNumericInput('Força', min: 0, max: 10)!;
+      final defense = UIUtils.getNumericInput('Defesa', min: 0, max: 10)!;
 
+      UIUtils.showLoading('Criando item...');
       final item = magicItemService.createItem(
         id: id,
         name: name,
@@ -283,68 +286,74 @@ class RPGCLI {
         force: force,
         defense: defense,
       );
+      UIUtils.stopLoading();
 
-      print('\nItem criado com sucesso!');
+      UIUtils.printSuccess('\nItem criado com sucesso!');
       print(item);
     } catch (e) {
-      print('Erro ao criar item: $e');
+      UIUtils.printError('Erro ao criar item: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void listMagicItems() {
     final items = magicItemService.getAllItems();
     if (items.isEmpty) {
-      print('Nenhum item cadastrado.');
+      UIUtils.printWarning('Nenhum item cadastrado.');
       return;
     }
-    print('\n=== Lista de Itens Mágicos ===');
-    items.forEach(print);
+
+    UIUtils.clearScreen();
+    UIUtils.printHeader('Lista de Itens Mágicos');
+
+    final headers = ['ID', 'Nome', 'Tipo', 'Força', 'Defesa'];
+    final rows = items.map((i) => [
+      i.id,
+      i.name,
+      i.type.name,
+      i.force.toString(),
+      i.defense.toString()
+    ]).toList();
+
+    UIUtils.printTable(headers, rows);
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void getMagicItemById() {
-    print('\nID do Item: ');
-    final id = stdin.readLineSync()!;
+    final id = UIUtils.getInput('ID do Item', required: true)!;
     try {
+      UIUtils.showLoading('Buscando item...');
       final item = magicItemService.getItemById(id);
-      print('\nItem encontrado:');
+      UIUtils.stopLoading();
+
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Detalhes do Item');
       print(item);
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void updateMagicItem() {
-    print('\nID do Item: ');
-    final id = stdin.readLineSync()!;
+    final id = UIUtils.getInput('ID do Item', required: true)!;
     try {
       magicItemService.getItemById(id);
 
-      print('Novo Nome (deixe em branco para manter): ');
-      final name = stdin.readLineSync();
+      final name = UIUtils.getInput('Novo Nome (deixe em branco para manter)', required: false);
 
-      print('\nTipos disponíveis:');
-      ItemType.values.forEach((t) => print('${t.index + 1}. ${t.name}'));
-      print('Novo Tipo (número, deixe em branco para manter): ');
-      final typeInput = stdin.readLineSync();
+      UIUtils.printInfo('\nTipos disponíveis:');
+      ItemType.values.forEach((t) => UIUtils.printInfo('${t.index + 1}. ${t.name}'));
+      final typeInput = UIUtils.getNumericInput('Novo Tipo (deixe em branco para manter)', required: false, min: 1, max: ItemType.values.length);
       ItemType? type;
-      if (typeInput?.isNotEmpty == true) {
-        type = ItemType.values[int.parse(typeInput!) - 1];
+      if (typeInput != null) {
+        type = ItemType.values[typeInput - 1];
       }
 
-      print('Nova Força (deixe em branco para manter): ');
-      final forceInput = stdin.readLineSync();
-      int? force;
-      if (forceInput?.isNotEmpty == true) {
-        force = int.parse(forceInput!);
-      }
+      final force = UIUtils.getNumericInput('Nova Força (deixe em branco para manter)', required: false, min: 0, max: 10);
+      final defense = UIUtils.getNumericInput('Nova Defesa (deixe em branco para manter)', required: false, min: 0, max: 10);
 
-      print('Nova Defesa (deixe em branco para manter): ');
-      final defenseInput = stdin.readLineSync();
-      int? defense;
-      if (defenseInput?.isNotEmpty == true) {
-        defense = int.parse(defenseInput!);
-      }
-
+      UIUtils.showLoading('Atualizando item...');
       final updatedItem = magicItemService.updateItem(
         id: id,
         name: name,
@@ -352,84 +361,110 @@ class RPGCLI {
         force: force,
         defense: defense,
       );
+      UIUtils.stopLoading();
 
-      print('\nItem atualizado com sucesso!');
+      UIUtils.printSuccess('\nItem atualizado com sucesso!');
       print(updatedItem);
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void deleteMagicItem() {
-    print('\nID do Item: ');
-    final id = stdin.readLineSync()!;
+    final id = UIUtils.getInput('ID do Item', required: true)!;
     try {
+      UIUtils.showLoading('Removendo item...');
       magicItemService.deleteItem(id);
-      print('Item removido com sucesso!');
+      UIUtils.stopLoading();
+      UIUtils.printSuccess('Item removido com sucesso!');
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void addItemToCharacter() {
-    print('\nID do Personagem: ');
-    final characterId = stdin.readLineSync()!;
-    print('ID do Item: ');
-    final itemId = stdin.readLineSync()!;
+    final characterId = UIUtils.getInput('ID do Personagem', required: true)!;
+    final itemId = UIUtils.getInput('ID do Item', required: true)!;
 
     try {
+      UIUtils.showLoading('Adicionando item ao personagem...');
       final item = magicItemService.getItemById(itemId);
       characterService.addItemToCharacter(characterId, item);
-      print('Item adicionado ao personagem com sucesso!');
+      UIUtils.stopLoading();
+      UIUtils.printSuccess('Item adicionado ao personagem com sucesso!');
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void removeItemFromCharacter() {
-    print('\nID do Personagem: ');
-    final characterId = stdin.readLineSync()!;
-    print('ID do Item: ');
-    final itemId = stdin.readLineSync()!;
+    final characterId = UIUtils.getInput('ID do Personagem', required: true)!;
+    final itemId = UIUtils.getInput('ID do Item', required: true)!;
 
     try {
+      UIUtils.showLoading('Removendo item do personagem...');
       characterService.removeItemFromCharacter(characterId, itemId);
-      print('Item removido do personagem com sucesso!');
+      UIUtils.stopLoading();
+      UIUtils.printSuccess('Item removido do personagem com sucesso!');
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void listCharacterItems() {
-    print('\nID do Personagem: ');
-    final characterId = stdin.readLineSync()!;
+    final characterId = UIUtils.getInput('ID do Personagem', required: true)!;
     try {
+      UIUtils.showLoading('Buscando itens do personagem...');
       final items = characterService.getCharacterItems(characterId);
+      UIUtils.stopLoading();
+
       if (items.isEmpty) {
-        print('Personagem não possui itens.');
+        UIUtils.printWarning('Personagem não possui itens.');
         return;
       }
-      print('\n=== Itens do Personagem ===');
-      items.forEach(print);
+
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Itens do Personagem');
+
+      final headers = ['ID', 'Nome', 'Tipo', 'Força', 'Defesa'];
+      final rows = items.map((i) => [
+        i.id,
+        i.name,
+        i.type.name,
+        i.force.toString(),
+        i.defense.toString()
+      ]).toList();
+
+      UIUtils.printTable(headers, rows);
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 
   void getCharacterAmulet() {
-    print('\nID do Personagem: ');
-    final characterId = stdin.readLineSync()!;
+    final characterId = UIUtils.getInput('ID do Personagem', required: true)!;
     try {
+      UIUtils.showLoading('Buscando amuleto do personagem...');
       final amulet = characterService.getCharacterAmulet(characterId);
+      UIUtils.stopLoading();
+
       if (amulet == null) {
-        print('Personagem não possui amuleto.');
+        UIUtils.printWarning('Personagem não possui amuleto.');
         return;
       }
-      print('\nAmuleto do Personagem:');
+
+      UIUtils.clearScreen();
+      UIUtils.printHeader('Amuleto do Personagem');
       print(amulet);
     } catch (e) {
-      print('Erro: $e');
+      UIUtils.printError('Erro: $e');
     }
+    UIUtils.getInput('\nPressione Enter para continuar...', required: false);
   }
 }
 
