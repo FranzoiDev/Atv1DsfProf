@@ -97,50 +97,55 @@ class UIUtils {
       columnWidths[i] += 2;
     }
 
-    print(colorize(topLeftCorner, brightBlue));
+    String topBorder = colorize(topLeftCorner, brightBlue);
     for (var i = 0; i < headers.length; i++) {
-      print(colorize(horizontalLine * columnWidths[i], brightBlue));
+      topBorder += colorize(horizontalLine * columnWidths[i], brightBlue);
       if (i < headers.length - 1) {
-        print(colorize(tDown, brightBlue));
+        topBorder += colorize(tDown, brightBlue);
       }
     }
-    print(colorize(topRightCorner, brightBlue));
+    topBorder += colorize(topRightCorner, brightBlue);
+    print(topBorder);
 
-    print(colorize(verticalLine, brightBlue));
+    String headerLine = colorize(verticalLine, brightBlue);
     for (var i = 0; i < headers.length; i++) {
       final padding = columnWidths[i] - headers[i].length;
       final leftPadding = padding ~/ 2;
       final rightPadding = padding - leftPadding;
-      print(' ' * leftPadding + headers[i] + ' ' * rightPadding + colorize(verticalLine, brightBlue));
+      headerLine += ' ' * leftPadding + headers[i] + ' ' * rightPadding + colorize(verticalLine, brightBlue);
     }
+    print(headerLine);
 
-    print(colorize(tRight, brightBlue));
+    String separator = colorize(tRight, brightBlue);
     for (var i = 0; i < headers.length; i++) {
-      print(colorize(horizontalLine * columnWidths[i], brightBlue));
+      separator += colorize(horizontalLine * columnWidths[i], brightBlue);
       if (i < headers.length - 1) {
-        print(colorize(cross, brightBlue));
+        separator += colorize(cross, brightBlue);
       }
     }
-    print(colorize(tLeft, brightBlue));
+    separator += colorize(tLeft, brightBlue);
+    print(separator);
 
     for (var row in rows) {
-      print(colorize(verticalLine, brightBlue));
+      String rowLine = colorize(verticalLine, brightBlue);
       for (var i = 0; i < row.length; i++) {
         final padding = columnWidths[i] - row[i].length;
         final leftPadding = padding ~/ 2;
         final rightPadding = padding - leftPadding;
-        print(' ' * leftPadding + row[i] + ' ' * rightPadding + colorize(verticalLine, brightBlue));
+        rowLine += ' ' * leftPadding + row[i] + ' ' * rightPadding + colorize(verticalLine, brightBlue);
       }
+      print(rowLine);
     }
 
-    print(colorize(bottomLeftCorner, brightBlue));
+    String bottomBorder = colorize(bottomLeftCorner, brightBlue);
     for (var i = 0; i < headers.length; i++) {
-      print(colorize(horizontalLine * columnWidths[i], brightBlue));
+      bottomBorder += colorize(horizontalLine * columnWidths[i], brightBlue);
       if (i < headers.length - 1) {
-        print(colorize(tUp, brightBlue));
+        bottomBorder += colorize(tUp, brightBlue);
       }
     }
-    print(colorize(bottomRightCorner, brightBlue));
+    bottomBorder += colorize(bottomRightCorner, brightBlue);
+    print(bottomBorder);
   }
 
   static String? getInput(String prompt, {bool required = true, String? defaultValue}) {
